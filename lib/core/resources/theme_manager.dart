@@ -6,20 +6,19 @@ import 'package:istiqamah/core/resources/values_manager.dart';
 import 'color_manager.dart';
 import 'font_manager.dart';
 
-ThemeData lightTheme(bool isLight){
+ThemeData myTheme(bool isLight,BuildContext context){
   return ThemeData(
       primaryColor: ColorManager.primary,
       scaffoldBackgroundColor: ColorManager.scaffoldLight,
 
 
-      appBarTheme:  AppBarTheme(
-        elevation: 0,
-        color: isLight ? ColorManager.scaffoldLight : ColorManager.scaffoldDark,
-        systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor:isLight? ColorManager.scaffoldLight : ColorManager.scaffoldDark,
-          statusBarIconBrightness:isLight? Brightness.dark : Brightness.light,
-        )
-
+      appBarTheme:  Theme.of(context).appBarTheme.copyWith(
+          elevation: 0,
+          color: isLight ? ColorManager.scaffoldLight : ColorManager.scaffoldDark,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor:isLight? ColorManager.scaffoldLight : ColorManager.scaffoldDark,
+            statusBarIconBrightness:isLight? Brightness.dark : Brightness.light,
+          )
       ),
 
 

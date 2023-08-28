@@ -6,7 +6,6 @@ class DioHelper{
    static init(){
     dio=Dio(
       BaseOptions(
-        baseUrl: UrlManager.baseUrl,
         receiveDataWhenStatusError: true,
         headers: {
           'language': 'en',

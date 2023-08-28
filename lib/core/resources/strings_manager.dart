@@ -1,3 +1,3 @@
 class UrlManager{
-  static String baseUrl = 'https://api.quran.com/api/v4/' ;
+  static String quranbaseUrl = 'https://api.quran.com/api/v4/' ;
 }

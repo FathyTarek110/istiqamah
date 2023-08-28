@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:istiqamah/core/resources/color_manager.dart';
 import 'package:istiqamah/core/resources/font_manager.dart';
+import 'package:istiqamah/core/resources/routes_manager.dart';
 import 'package:istiqamah/core/resources/values_manager.dart';
 
 class OnBoardingScreen extends StatelessWidget {
@@ -31,7 +32,9 @@ class OnBoardingScreen extends StatelessWidget {
 
           Container(
               width: MediaQuery.of(context).size.width/2,
-              child: ElevatedButton(onPressed: (){}, child: Text('Get Started')))
+              child: ElevatedButton(onPressed: (){
+                Navigator.pushReplacementNamed(context, Routes.mainLayoutRoute);
+              }, child: Text('Get Started')))
         ],
       ),
     );
