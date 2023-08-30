@@ -17,9 +17,9 @@ class OnBoardingScreen extends StatelessWidget {
         children: [
           Text('ISTIQAMAH',style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: ColorManager.primary),),
           Text('Your Muslim Friend',style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: FontSize.s18),),
-          SizedBox(height: AppSize.s10,),
+          const SizedBox(height: AppSize.s10,),
           Text('وَذَكِّرْ فَإِنَّ الذِّكْرَىٰ تَنفَعُ الْمُؤْمِنِينَ',style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: FontSize.s18),),
-          SizedBox(height: AppSize.s10,),
+          const SizedBox(height: AppSize.s10,),
 
           Center(
             child: SvgPicture.asset(
@@ -30,11 +30,11 @@ class OnBoardingScreen extends StatelessWidget {
             ),
           ),
 
-          Container(
+          SizedBox(
               width: MediaQuery.of(context).size.width/2,
               child: ElevatedButton(onPressed: (){
                 Navigator.pushReplacementNamed(context, Routes.mainLayoutRoute);
-              }, child: Text('Get Started')))
+              }, child: const Text('Get Started')))
         ],
       ),
     );

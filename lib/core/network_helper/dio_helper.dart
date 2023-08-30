@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:istiqamah/core/resources/strings_manager.dart';
 
 class DioHelper{
   static late Dio dio;

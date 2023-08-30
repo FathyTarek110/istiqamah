@@ -52,7 +52,7 @@ ThemeData myTheme(bool isLight,BuildContext context){
     ),
 
     buttonTheme: ButtonThemeData(
-        shape: StadiumBorder(),buttonColor: ColorManager.secondaryColor,
+        shape: const StadiumBorder(),buttonColor: ColorManager.secondaryColor,
         disabledColor: ColorManager.textGray
     ),
 
