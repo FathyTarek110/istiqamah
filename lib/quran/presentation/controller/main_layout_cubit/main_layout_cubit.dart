@@ -4,7 +4,7 @@ import 'package:istiqamah/hadith/presentation/screens/hadith.dart';
 import 'package:istiqamah/prayer/presentation/screens/prayer_view.dart';
 import 'package:meta/meta.dart';
 
-import '../screens/quran/quranview.dart';
+import '../../screens/quran/quranview.dart';
 
 part 'main_layout_state.dart';
 

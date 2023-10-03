@@ -33,8 +33,8 @@ class OnBoardingScreen extends StatelessWidget {
           SizedBox(
               width: MediaQuery.of(context).size.width/2,
               child: ElevatedButton(onPressed: (){
-                Navigator.pushReplacementNamed(context, Routes.mainLayoutRoute);
-              }, child: const Text('Get Started')))
+                Navigator.pushReplacementNamed(context, Routes.registerRoute);
+              }, child: const Text('Next')))
         ],
       ),
     );

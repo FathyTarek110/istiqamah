@@ -11,7 +11,7 @@ void main() async{
   await CacheHelper.init();
   await DioHelper.init();
   ServiceLocator.init();
-  runApp(const MyApp());
+  runApp( MyApp(isFirst: false,));
 }
 
 

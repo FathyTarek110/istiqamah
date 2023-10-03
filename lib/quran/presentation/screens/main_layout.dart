@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:istiqamah/core/resources/font_manager.dart';
-import 'package:istiqamah/quran/presentation/controller/main_layout_cubit.dart';
+import 'package:istiqamah/quran/presentation/controller/main_layout_cubit/main_layout_cubit.dart';
 
 class MainLayout extends StatelessWidget {
   const MainLayout({super.key});
@@ -40,8 +40,6 @@ class MainLayout extends StatelessWidget {
                 BottomNavigationBarItem(icon: Image.asset('assets/icons/bottom_nav/quranUnslected.png'),activeIcon: Image.asset('assets/icons/bottom_nav/quranselected.png'),label: 'quran',),
                 BottomNavigationBarItem(icon:  Image.asset('assets/icons/bottom_nav/hadithUnslected.png'),activeIcon: Image.asset('assets/icons/bottom_nav/hadithselected.png'),label: 'hadith'),
                 BottomNavigationBarItem(icon:  Image.asset('assets/icons/bottom_nav/prayerunslected.png'),activeIcon: Image.asset('assets/icons/bottom_nav/prayerselected.png'),label: 'prayer'),
-                //BottomNavigationBarItem(icon:  Image.asset('assets/icons/bottom_nav/bookmarkunslected.png'),activeIcon: Image.asset('assets/icons/bottom_nav/bookmarkselected.png'),label: 'bookmarks'),
-
 
               ],
             ),

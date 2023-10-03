@@ -45,6 +45,7 @@ dependencies:
   flutter_swiper_view: ^1.1.8
   get_it: ^7.6.0
   flutter_svg: ^2.0.7
+  conditional_builder_null_safety: ^0.0.6
 
 
 
