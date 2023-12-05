@@ -8,7 +8,7 @@ class CaseGetSurahTranslation{
 
   CaseGetSurahTranslation(this.baseQuranRepository);
 
-  Future<Either<Failure,SurahTranslation>> execute (int surahId)async{
-    return await baseQuranRepository.getSurahTranslation(surahId);
+  Future<Either<Failure,SurahTranslation>> execute (int surahId , int translationId)async{
+    return await baseQuranRepository.getSurahTranslation(surahId,translationId);
   }
 }

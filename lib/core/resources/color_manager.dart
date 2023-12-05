@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ColorManager{
-  static Color primary = const Color(0xFF672cbc);
+  static Color primaryLight = const Color(0xFF863ed5);
+  static Color primaryDark = const Color(0xFFa44aff);
   static Color white = const Color(0xFFffffff);
   static Color whiteSmoke = const Color(0xFFf3f3f4);
   static Color scaffoldDark = const Color(0xFF040c23);
@@ -20,6 +21,8 @@ class ColorManager{
   static Color card = const Color(0XFFe0e0e0);
   static Color gradient1 = const Color(0xFFde99fa);
   static Color gradient2 = const Color(0xFF8f54ff);
+  static Color greyDark= const Color(0xFF1d2233);
+
 
 
 

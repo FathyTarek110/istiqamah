@@ -4,6 +4,7 @@ part of 'quran_cubit.dart';
 abstract class QuranState {}
 
 class QuranInitial extends QuranState {}
+class QuranUpdateBookMark extends QuranState {}
 class QuranScrollControllerInitial extends QuranState {}
 class QuranGetChaptersInitial extends QuranState {}
 class QuranGetChaptersSuccess extends QuranState {}

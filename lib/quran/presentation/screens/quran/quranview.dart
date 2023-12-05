@@ -1,5 +1,4 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:istiqamah/core/resources/color_manager.dart';
@@ -7,19 +6,21 @@ import 'package:istiqamah/core/resources/font_manager.dart';
 import 'package:istiqamah/core/resources/values_manager.dart';
 import 'package:istiqamah/quran/presentation/controller/quran_cubit/quran_cubit.dart';
 import 'package:istiqamah/quran/presentation/screens/quran/first_tab.dart';
-import 'package:istiqamah/quran/presentation/screens/quran/fourth_tab.dart';
-import 'package:istiqamah/quran/presentation/screens/quran/second_tab.dart';
-import 'package:istiqamah/quran/presentation/screens/quran/third_tap.dart';
 
 import '../../../../core/services/service_locator.dart';
 
-class QuranView extends StatelessWidget {
+class QuranView extends StatefulWidget {
   const QuranView({super.key});
 
   @override
+  State<QuranView> createState() => _QuranViewState();
+}
+
+class _QuranViewState extends State<QuranView> {
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => QuranCubit(sl())..scrollControllerInit()..getName()..getChapters(),
+      create: (context) => QuranCubit(sl())..scrollControllerInit()..updateAyaNumber()..getChapters(),
       child: BlocConsumer<QuranCubit, QuranState>(
         listener: (context, state) {
           // TODO: implement listener
@@ -28,7 +29,7 @@ class QuranView extends StatelessWidget {
           final QuranCubit cubit = QuranCubit.get(context);
           TextTheme textTheme = Theme.of(context).textTheme ;
           Size size = MediaQuery.of(context).size;
-          return  CustomScrollView(
+          return  ConditionalBuilder(condition: state is QuranGetChaptersSuccess, builder: (_)=>CustomScrollView(
             physics: const BouncingScrollPhysics(),
             controller: cubit.scrollController,
             slivers: [
@@ -40,7 +41,7 @@ class QuranView extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text('Asslamualaikum',style: textTheme.bodyMedium?.copyWith(fontSize: FontSize.s18,color: ColorManager.textGray),),
-                      Text(cubit.name,style: textTheme.bodyLarge?.copyWith(fontSize: FontSize.s24,color: ColorManager.textMediumLight),),
+                      Text(cubit.name,style: textTheme.bodyLarge?.copyWith(fontSize: FontSize.s24,color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.white),),
                     ],
                   ),
                 ),
@@ -53,12 +54,12 @@ class QuranView extends StatelessWidget {
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(AppSize.s10),
-                          gradient: LinearGradient(colors: [
-                            ColorManager.gradient1,
-                            ColorManager.gradient2
-                          ],
-                          )
+                            borderRadius: BorderRadius.circular(AppSize.s10),
+                            gradient: LinearGradient(colors: [
+                              ColorManager.gradient1,
+                              ColorManager.gradient2
+                            ],
+                            )
                         ),
                         width: double.infinity,
                         child: Padding(
@@ -75,9 +76,9 @@ class QuranView extends StatelessWidget {
                                 ],
                               ),
                               const SizedBox(height: AppSize.s20,),
-                              Text('Al-Fatiah',style: textTheme.bodyLarge?.copyWith(fontSize: FontSize.s20,color: ColorManager.white),),
+                              Text(cubit.lastReadAya,style: textTheme.bodyLarge?.copyWith(fontSize: FontSize.s20,color: ColorManager.white),),
                               const SizedBox(height: AppSize.s4,),
-                              Text('Ayah No: 1',style: textTheme.bodySmall?.copyWith(fontSize: FontSize.s14,color: ColorManager.white),)
+                              Text('Ayah No: ${cubit.lastReadAyaNumber}',style: textTheme.bodySmall?.copyWith(fontSize: FontSize.s14,color: ColorManager.white),)
                             ],
                           ),
                         ),
@@ -94,20 +95,20 @@ class QuranView extends StatelessWidget {
                 ),
               ),
 
-                 SliverToBoxAdapter(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: AppPadding.p24,horizontal: AppPadding.p16),
-                  child: Column(
-                    children: [
-                      ConditionalBuilder(
-                          condition: state is QuranGetChaptersSuccess,
-                          builder: (_)=>QuranBySoura(chapters: cubit.allChapters,), fallback: (_)=>Center(child: CircularProgressIndicator(color: ColorManager.primary,)))
-                    ],
-                  ),
-                )
+              SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: AppPadding.p24,horizontal: AppPadding.p16),
+                    child: Column(
+                      children: [
+                        ConditionalBuilder(
+                            condition: state is QuranGetChaptersSuccess,
+                            builder: (_)=>QuranBySoura(chapters: cubit.allChapters, refreshFunction: cubit.updateAyaNumber,), fallback: (_)=>Center(child: CircularProgressIndicator(color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.primaryDark,)))
+                      ],
+                    ),
+                  )
               )
             ],
-          );
+          ), fallback: (_)=>Center(child: CircularProgressIndicator(color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.primaryDark,)));
         },
       ),
     );

@@ -1,4 +1,3 @@
-import 'package:istiqamah/quran/domain/entity/chapter/chapter.dart';
 
 import '../../domain/entity/chapters/chapters.dart';
 

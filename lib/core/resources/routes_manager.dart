@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:istiqamah/intro/presentation/screens/onboarding_screen/register_screen.dart';
-import 'package:istiqamah/quran/presentation/screens/main_layout.dart';
+import 'package:istiqamah/quran/presentation/screens/main_layout/main_layout.dart';
 
 import '../../intro/presentation/screens/onboarding_screen/onboarding_screen.dart';
 import '../../intro/presentation/screens/splash_screen/splash_screen.dart';
@@ -24,7 +24,7 @@ class RouteGenerator{
       case Routes.onBoaringRoute:
         return MaterialPageRoute(builder: (_)=>  const OnBoardingScreen());
       case Routes.mainLayoutRoute:
-        return MaterialPageRoute(builder: (_)=>  const MainLayout());
+        return MaterialPageRoute(builder: (_)=>  const MainLayout(modeChange: false,));
       case Routes.registerRoute:
         return MaterialPageRoute(builder: (_)=>  const RegisterPage());
     }

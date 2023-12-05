@@ -1,9 +1,11 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:istiqamah/core/resources/color_manager.dart';
 import 'package:istiqamah/core/resources/font_manager.dart';
 import 'package:istiqamah/quran/presentation/controller/verses_cubit/verses_cubit.dart';
+import 'package:istiqamah/quran/presentation/screens/main_layout/main_layout.dart';
 
 import '../../../../core/resources/values_manager.dart';
 import '../../../../core/services/service_locator.dart';
@@ -19,7 +21,7 @@ class Verses extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => VersesCubit(sl(),sl())..scrollControllerInit()..getSurahVerses(surahId)..getSurahVersesTranslation(surahId),
+      create: (context) => VersesCubit(sl(),sl(),sl())..scrollControllerInit()..getSurahVerses(surahId)..getSurahVersesTranslation(surahId),
       child: BlocConsumer<VersesCubit, VersesState>(
         listener: (context, state) {
           // TODO: implement listener
@@ -36,11 +38,12 @@ class Verses extends StatelessWidget {
               slivers: [
                 SliverAppBar(
                   leading: IconButton(onPressed: (){
-                    Navigator.pop(context);
+                    cubit.player.stop();
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_)=> const MainLayout(modeChange: false,)));
                   }, icon: Icon(Icons.arrow_back,color: ColorManager.textGray,),
                     splashColor: Colors.transparent,
                   ),
-                  title: Text(translatedName,style: textTheme.bodyLarge?.copyWith(color: ColorManager.primary,fontSize: FontSize.s20),),
+                  title: Text(translatedName,style: textTheme.bodyLarge?.copyWith(color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.white,fontSize: FontSize.s20),),
                 ),
                 SliverToBoxAdapter(
                   child: Padding(
@@ -113,11 +116,18 @@ class Verses extends StatelessWidget {
                         children: [
                           ...cubit.verses.map((e) {
                            var index = cubit.verses.indexOf(e);
-                            return AyaCard(textTheme: textTheme, ayaNumber: e['verse_key'], ayaText: e['text_uthmani'], ayaTranslation: cubit.verseTranslation[index]['text'],);
+                            return AyaCard(textTheme: textTheme, ayaNumber: e['verse_key'], ayaText: e['text_uthmani'], ayaTranslation: cubit.verseTranslation[index]['text'], playIcon: cubit.isAyaPlayed && cubit.selectedIndex == index?  Icon(Icons.stop_outlined,color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.primaryDark,) : Icon(Icons.play_arrow_outlined,color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.primaryLight,) ,playFunction:cubit.isAyaPlayed ?(){cubit.stopReadingAya();} : (){
+                              cubit.pushedPlayButton(index);
+                              cubit.readAya(e['verse_key']);
+                              }, savedIcon: cubit.cachedAyaNumber == e['verse_key'] ? cubit.bookmarkIcons[1] :cubit.bookmarkIcons[0],bookmarkFunction:(){
+                                cubit.bookMarkAya(e['verse_key'],context,translatedName);
+
+                            }
+                            );
                           }).toList()
                         ],
                       ),
-                      fallback: (_)=>Center(child: CircularProgressIndicator(color: ColorManager.primary,),)),
+                      fallback: (_)=>Center(child: CircularProgressIndicator(color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.primaryDark,),)),
                 )
               ],
             ),
@@ -131,14 +141,16 @@ class Verses extends StatelessWidget {
 class AyaCard extends StatelessWidget {
   const AyaCard({
     super.key,
-    required this.textTheme, required this.ayaNumber, required this.ayaText, required this.ayaTranslation,
+    required this.textTheme, required this.ayaNumber, required this.ayaText, required this.ayaTranslation, required this.playIcon, this.playFunction, required this.savedIcon, this.bookmarkFunction,
   });
-
   final TextTheme textTheme;
   final String ayaNumber;
   final String ayaText;
   final String ayaTranslation;
-
+  final Icon playIcon;
+  final void Function()? playFunction;
+  final Icon savedIcon;
+  final void Function()? bookmarkFunction;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -149,14 +161,14 @@ class AyaCard extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppSize.s10),
-                color: ColorManager.whiteSmoke
+                color: Theme.of(context).brightness == Brightness.light ? ColorManager.whiteSmoke : ColorManager.greyDark
               ),
               child:Row(
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: AppSize.s10,horizontal: AppSize.s13),
                     child: CircleAvatar(
-                      backgroundColor: ColorManager.primary,
+                      backgroundColor: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.primaryDark ,
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Text(ayaNumber,style: textTheme.bodyMedium?.copyWith(fontSize: FontSize.s14,color: Colors.white),),
@@ -164,9 +176,9 @@ class AyaCard extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.share_outlined,color: ColorManager.primary,)),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.play_arrow_outlined,color: ColorManager.primary,)),
-                  IconButton(onPressed: (){}, icon: Icon(Icons.bookmark_outline,color: ColorManager.primary,)),
+                  //IconButton(onPressed: (){}, icon: Icon(Icons.share_outlined,color: ColorManager.primary,)),
+                  IconButton(onPressed: playFunction, icon: playIcon,),
+                  IconButton(onPressed: bookmarkFunction, icon: savedIcon),
                 ],
               ),
             ),
@@ -178,12 +190,12 @@ class AyaCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text(ayaText,style: textTheme.titleMedium?.copyWith(color: ColorManager.textMediumLight,fontSize: FontSize.s18),textAlign: TextAlign.end,),
+                  Text(ayaText,style: textTheme.titleMedium?.copyWith(color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.white,fontSize: FontSize.s18),textAlign: TextAlign.end,),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: AppPadding.p16),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                        child: Text(ayaTranslation,style: textTheme.bodyMedium?.copyWith(color: ColorManager.textMediumLight,fontSize: FontSize.s16,),)),
+                        child: Text(Bidi.stripHtmlIfNeeded(ayaTranslation).replaceFirst(RegExp('1'), ""),style: textTheme.bodyMedium?.copyWith(color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.white,fontSize: FontSize.s16,),)),
                   )
                 ],
               ),

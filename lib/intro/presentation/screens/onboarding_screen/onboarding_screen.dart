@@ -15,7 +15,7 @@ class OnBoardingScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text('ISTIQAMAH',style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: ColorManager.primary),),
+          Text('ISTIQAMAH',style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Theme.of(context).brightness == Brightness.light ? ColorManager.primaryLight : ColorManager.white,),),
           Text('Your Muslim Friend',style: Theme.of(context).textTheme.bodySmall?.copyWith(fontSize: FontSize.s18),),
           const SizedBox(height: AppSize.s10,),
           Text('وَذَكِّرْ فَإِنَّ الذِّكْرَىٰ تَنفَعُ الْمُؤْمِنِينَ',style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: FontSize.s18),),
